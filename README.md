@@ -114,9 +114,6 @@
 | SUBCONFIG  | [https://raw.github.../ACL4SSR_Online_Full_MultiMode.ini](https://raw.githubusercontent.com/cmliu/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini) |×| clash、singbox等 订阅转换配置文件                            |
 
 
-## Star 星星走起
-[![Stargazers over time](https://starchart.cc/ansoncloud8/am-tunnel.svg?variant=adaptive)](https://starchart.cc/ansoncloud8/am-tunnel)
-
 ## 已适配自适应订阅内容
    - [v2rayN](https://github.com/2dust/v2rayN)
    - [v2rayU](https://github.com/yanue/V2rayU/releases)
