@@ -371,6 +371,7 @@ async function vlessOverWSHandler(request) {
 			const {
 				hasError,
 				message,
+				addressType,
 				portRemote = 443,
 				addressRemote = '',
 				rawDataIndex,
@@ -405,7 +406,7 @@ async function vlessOverWSHandler(request) {
 				udpStreamWrite(rawClientData);
 				return;
 			}
-			handleTCPOutBound(remoteSocketWapper, addressRemote, portRemote, rawClientData, webSocket, vlessResponseHeader, log);
+			handleTCPOutBound(remoteSocketWapper, addressType, addressRemote, portRemote, rawClientData, webSocket, vlessResponseHeader, log);
 		},
 		close() {
 			log(`readableWebSocketStream is close`);
@@ -435,7 +436,7 @@ async function vlessOverWSHandler(request) {
  * @param {function} log The logging function.
  * @returns {Promise<void>} The remote socket.
  */
-async function handleTCPOutBound(remoteSocket, addressRemote, portRemote, rawClientData, webSocket, vlessResponseHeader, log,) {
+async function handleTCPOutBound(remoteSocket, addressType, addressRemote, portRemote, rawClientData, webSocket, vlessResponseHeader, log,) {
 
 	/**
 	 * Connects to a given address and port and writes data to the socket.
@@ -443,9 +444,10 @@ async function handleTCPOutBound(remoteSocket, addressRemote, portRemote, rawCli
 	 * @param {number} port The port to connect to.
 	 * @returns {Promise<import("@cloudflare/workers-types").Socket>} A Promise that resolves to the connected socket.
 	 */
-	async function connectAndWrite(address, port) {
+	async function connectAndWrite(address, port, socks = false) {
 		/** @type {import("@cloudflare/workers-types").Socket} */
-		const tcpSocket = connect({
+		const tcpSocket = socks ? await socks5Connect(addressType, address, port, log)
+		: connect({
 			hostname: address,
 			port: port,
 		});
@@ -455,22 +457,27 @@ async function handleTCPOutBound(remoteSocket, addressRemote, portRemote, rawCli
 		await writer.write(rawClientData); // first write, nomal is tls client hello
 		writer.releaseLock();
 		return tcpSocket;
-	}
+	}	
 
 	/**
 	 * Retries connecting to the remote address and port if the Cloudflare socket has no incoming data.
 	 * @returns {Promise<void>} A Promise that resolves when the retry is complete.
 	 */
 	async function retry() {
-		const tcpSocket = await connectAndWrite(proxyIP || addressRemote, portRemote)
-		tcpSocket.closed.catch(error => {
-			console.log('retry tcpSocket closed error', error);
+		let tcpSocket
+		if (enableSocks) {
+			tcpSocket = await connectAndWrite(addressRemote, portRemote, true);
+		} else {
+			//if (!proxyIP || proxyIP == '') proxyIP = atob('cHJveHlpcC5meHhrLmRlZHluLmlv');
+			tcpSocket = await connectAndWrite(proxyIP || addressRemote, portRemote);
+		}
+		tcpSocket.closed.catch((error) => {
+			console.log("retry tcpSocket closed error", error);
 		}).finally(() => {
 			safeCloseWebSocket(webSocket);
-		})
+		});
 		remoteSocketToWS(tcpSocket, webSocket, vlessResponseHeader, null, log);
 	}
-
 	const tcpSocket = await connectAndWrite(addressRemote, portRemote);
 
 	// when remoteSocket is ready, pass to websocket
