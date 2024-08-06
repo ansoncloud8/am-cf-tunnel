@@ -11,10 +11,10 @@ import { connect } from 'cloudflare:sockets';
 // [Windows] Press "Win + R", input cmd and run:  Powershell -NoExit -Command "[guid]::NewGuid()"
 let userID = '866853eb-5293-4f09-bf00-e13eb237c655';
 
-const proxyIPs = ['cdn.xn--b6gac.eu.org', 'cdn-all.xn--b6gac.eu.org', 'workers.cloudflare.cyou'];
+let proxyIPs;
 
 // if you want to use ipv6 or single proxyIP, please add comment at this line and remove comment at the next line
-let proxyIP = proxyIPs[Math.floor(Math.random() * proxyIPs.length)];
+let proxyIP = '';//
 
 let sub = '';// 留空则使用内置订阅
 let subconverter = 'url.v1.mk';// clash订阅转换后端，自带虚假uuid和host订阅。
@@ -37,8 +37,16 @@ let fakeUserID ;
 let fakeHostName ;
 let noTLS = 'false'; 
 const expire = 4102329600;//2099-12-31
-let addresses = [];
-let addressesapi = [];
+
+// 设置优选地址，不带端口号默认443，TLS订阅生成
+let addresses = [
+	'icook.tw:443#t.me/AM_CLUBS',//官方优选域名
+	//'cloudflare.cfgo.cc:443#关注YouTube频道@AM_CLUB',
+	'visa.com:443#youtube.com/@AM_CLUB'
+];
+// 设置优选地址api接口
+let addressesapi = ['https://raw.githubusercontent.com/ansoncloud8/am-tunnel/dev/ipv4.txt'];
+
 let addressesnotls = [];
 let addressesnotlsapi = [];
 let addressescsv = [];
@@ -49,6 +57,8 @@ let ChatID ='';
 let proxyhosts = [];//本地代理域名池
 let proxyhostsURL = 'https://github.com/ansoncloud8/am-cf-trojan/blob/main/proxyhosts.txt';//在线代理域名池URL
 let RproxyIP = 'false';
+
+
 export default {
 	/**
 	 * @param {import("@cloudflare/workers-types").Request} request
