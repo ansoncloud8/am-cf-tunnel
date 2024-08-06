@@ -61,6 +61,7 @@ let subconfig = "https://raw.githubusercontent.com/ansoncloud8/ACL4SSR/main/Clas
 let socks5Address = '';
 let parsedSocks5Address = {}; 
 let enableSocks = false;
+let RproxyIP = 'false';
 
 if (!isValidUUID(userID)) {
 	throw new Error('uuid is invalid');
@@ -506,7 +507,7 @@ async function handleTCPOutBound(remoteSocket, addressType, addressRemote, portR
 		});
 		remoteSocketToWS(tcpSocket, webSocket, vlessResponseHeader, null, log);
 	}
-	const tcpSocket = await connectAndWrite(addressRemote, portRemote);
+	const tcpSocket = await connectAndWrite(addressRemote, portRemote,enableSocks);
 
 	// when remoteSocket is ready, pass to websocket
 	// remote--> ws
