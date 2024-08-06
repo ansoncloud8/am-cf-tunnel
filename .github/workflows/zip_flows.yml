@@ -17,13 +17,13 @@ jobs:
       uses: actions/checkout@v2 
 
     - name: Zip the worker file # 将 _worker.js 文件打包成 worker.js.zip
-      run: zip worker.js.zip _worker.js 
+      run: zip _worker.js.zip _worker.js 
 
     - name: Commit and push the packaged file # 提交并推送打包后的文件
       uses: EndBug/add-and-commit@v7 
       with:
-        add: 'worker.js.zip' 
-        message: 'Automatically package and commit worker.js.zip' 
+        add: '_worker.js.zip' 
+        message: 'Automatically package and commit _worker.js.zip' 
         author_name: github-actions[bot] 
         author_email: actions[bot]@users.noreply.github.com 
         token: ${{ secrets.GH_TOKEN }} 
