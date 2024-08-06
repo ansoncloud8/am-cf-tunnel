@@ -1743,6 +1743,30 @@ function subAddresses(host,UUID,noTLS,newAddressesapi,newAddressescsv,newAddress
 			addressid = match[3] || address;
 		}
 
+		//🇸🇬 SG：新加坡 🇭🇰 HK：香港 🇰🇷 KR：韩国 🇯🇵 JP：日本 🇬🇧 GB：英国 🇺🇸 US：美国 🇼🇸 TW：台湾
+		if (addressid.includes('AM')) {
+			addressid = addressid;
+		} else if (addressid === 'SG') {
+			addressid = '🇸🇬 SG';
+		} else if (addressid === 'HK') {
+			addressid = '🇭🇰 HK';
+		} else if (addressid === 'KR') {
+			addressid = '🇰🇷 KR';
+		} else if (addressid === 'JP') {
+			addressid = '🇯🇵 JP';
+		} else if (addressid === 'GB') {
+			addressid = '🇬🇧 GB';
+		} else if (addressid === 'US') {
+			addressid = '🇺🇸 US';
+		} else if (addressid === 'TW') {
+			addressid = '🇼🇸 TW';
+		} else if (addressid === 'CF') {
+			addressid = '📶 ' + addressid;
+		} else {
+			addressid = '📶 ' + addressid;
+		}
+	
+
 		const httpsPorts = ["2053","2083","2087","2096","8443"];
 		if (!isValidIPv4(address) && port == "443") {
 			for (let httpsPort of httpsPorts) {
