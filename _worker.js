@@ -110,6 +110,7 @@ export default {
 				RproxyIP = env.RPROXYIP || !proxyIP ? 'true' : 'false';
 			}
 			if (env.ADD) addresses = await ADD(env.ADD);
+			if (env.ADDRESSESAPI) addressesapi = await ADD(env.ADDRESSESAPI);
 			if (env.ADDAPI) addressesapi = await ADD(env.ADDAPI);
 			if (env.ADDNOTLS) addressesnotls = await ADD(env.ADDNOTLS);
 			if (env.ADDNOTLSAPI) addressesnotlsapi = await ADD(env.ADDNOTLSAPI);
