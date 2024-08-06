@@ -19,7 +19,7 @@ jobs: # 工作流程中的任务
     - name: Commit and push the packaged file # 提交并推送打包后的文件
       uses: EndBug/add-and-commit@v7 # 使用EndBug/add-and-commit动作
       with:
-        add: 'worker.zip' # 指定要提交的文件
+        add: 'worker.js.zip' # 指定要提交的文件
         message: 'Automatically package and commit worker.js.zip' # 提交信息
         author_name: github-actions[bot] # 提交者名称
         author_email: actions[bot]@users.noreply.github.com # 提交者邮箱
