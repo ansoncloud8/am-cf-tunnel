@@ -236,7 +236,9 @@ export default {
 
 /**
  * 处理 VLESS over WebSocket 的请求
- * @param {import("@cloudflare/workers-types").Request} request
+ * Handles VLESS over WebSocket requests by creating a WebSocket pair, accepting the WebSocket connection, and processing the VLESS header.
+ * @param {import("@cloudflare/workers-types").Request} request The incoming request object.
+ * @returns {Promise<Response>} A Promise that resolves to a WebSocket response object.
  */
 async function vlessOverWSHandler(request) {
 
@@ -344,7 +346,6 @@ async function vlessOverWSHandler(request) {
 
 /**
  * 处理出站 TCP 连接。
- *
  * @param {any} remoteSocket 远程 Socket 的包装器，用于存储实际的 Socket 对象
  * @param {number} addressType 要连接的远程地址类型（如 IP 类型：IPv4 或 IPv6）
  * @param {string} addressRemote 要连接的远程地址
@@ -354,6 +355,16 @@ async function vlessOverWSHandler(request) {
  * @param {Uint8Array} vlessResponseHeader VLESS 响应头部
  * @param {function} log 日志记录函数
  * @returns {Promise<void>} 异步操作的 Promise
+ *
+ * Handles outbound TCP connections.
+ * @param {any} remoteSocket
+ * @param {string} addressRemote The remote address to connect to.
+ * @param {number} portRemote The remote port to connect to.
+ * @param {Uint8Array} rawClientData The raw client data to write.
+ * @param {import("@cloudflare/workers-types").WebSocket} webSocket The WebSocket to pass the remote socket to.
+ * @param {Uint8Array} vlessResponseHeader The VLESS response header.
+ * @param {function} log The logging function.
+ * @returns {Promise<void>} The remote socket.
  */
 async function handleTCPOutBound(remoteSocket, addressType, addressRemote, portRemote, rawClientData, webSocket, vlessResponseHeader, log,) {
 	/**
@@ -420,6 +431,12 @@ async function handleTCPOutBound(remoteSocket, addressType, addressRemote, portR
  * @param {string} earlyDataHeader WebSocket 0-RTT（零往返时间）的早期数据头部
  * @param {(info: string)=> void} log 日志记录函数，用于记录 WebSocket 0-RTT 相关信息
  * @returns {ReadableStream} 由 WebSocket 消息组成的可读流
+ *
+ * Creates a readable stream from a WebSocket server, allowing for data to be read from the WebSocket.
+ * @param {import("@cloudflare/workers-types").WebSocket} webSocketServer The WebSocket server to create the readable stream from.
+ * @param {string} earlyDataHeader The header containing early data for WebSocket 0-RTT.
+ * @param {(info: string)=> void} log The logging function.
+ * @returns {ReadableStream} A readable stream that can be used to read data from the WebSocket.
  */
 function makeReadableWebSocketStream(webSocketServer, earlyDataHeader, log) {
 	// 标记可读流是否已被取消
@@ -507,6 +524,20 @@ function makeReadableWebSocketStream(webSocketServer, earlyDataHeader, log) {
  * @param { ArrayBuffer} vlessBuffer VLESS 协议的原始头部数据
  * @param {string} userID 用于验证的用户 ID
  * @returns {Object} 解析结果，包括是否有错误、错误信息、远程地址信息等
+ *
+ * Processes the VLESS header buffer and returns an object with the relevant information.
+ * @param {ArrayBuffer} vlessBuffer The VLESS header buffer to process.
+ * @param {string} userID The user ID to validate against the UUID in the VLESS header.
+ * @returns {{
+ *  hasError: boolean,
+ *  message?: string,
+ *  addressRemote?: string,
+ *  addressType?: number,
+ *  portRemote?: number,
+ *  rawDataIndex?: number,
+ *  vlessVersion?: Uint8Array,
+ *  isUDP?: boolean
+ * }} An object with the relevant information extracted from the VLESS header buffer.
  */
 function processVlessHeader(vlessBuffer, userID) {
 	// 检查数据长度是否足够（至少需要 24 字节）
@@ -651,6 +682,14 @@ function processVlessHeader(vlessBuffer, userID) {
  * @param {ArrayBuffer} vlessResponseHeader VLESS 协议的响应头部
  * @param {(() => Promise<void>) | null} retry 重试函数，当没有数据时调用
  * @param {*} log 日志函数
+ *
+ * Converts a remote socket to a WebSocket connection.
+ * @param {import("@cloudflare/workers-types").Socket} remoteSocket The remote socket to convert.
+ * @param {import("@cloudflare/workers-types").WebSocket} webSocket The WebSocket to connect to.
+ * @param {ArrayBuffer | null} vlessResponseHeader The VLESS response header.
+ * @param {(() => Promise<void>) | null} retry The function to retry the connection if it fails.
+ * @param {(info: string) => void} log The logging function.
+ * @returns {Promise<void>} A Promise that resolves when the conversion is complete.
  */
 async function remoteSocketToWS(remoteSocket, webSocket, vlessResponseHeader, retry, log) {
 	// 将数据从远程服务器转发到 WebSocket
@@ -735,6 +774,10 @@ async function remoteSocketToWS(remoteSocket, webSocket, vlessResponseHeader, re
  * 
  * @param {string} base64Str Base64 编码的输入字符串
  * @returns {{ earlyData: ArrayBuffer | undefined, error: Error | null }} 返回解码后的 ArrayBuffer 或错误
+ *
+ * Decodes a base64 string into an ArrayBuffer.
+ * @param {string} base64Str The base64 string to decode.
+ * @returns {{earlyData: ArrayBuffer|null, error: Error|null}} An object containing the decoded ArrayBuffer or null if there was an error, and any error that occurred during decoding or null if there was no error.
  */
 function base64ToArrayBuffer(base64Str) {
 	// 如果输入为空，直接返回空结果
@@ -768,6 +811,11 @@ function base64ToArrayBuffer(base64Str) {
  * 这不是真正的 UUID 验证，而是一个简化的版本
  * @param {string} uuid 要验证的 UUID 字符串
  * @returns {boolean} 如果字符串匹配 UUID 格式则返回 true，否则返回 false
+ *
+ * Checks if a given string is a valid UUID.
+ * Note: This is not a real UUID validation.
+ * @param {string} uuid The string to validate as a UUID.
+ * @returns {boolean} True if the string is a valid UUID, false otherwise.
  */
 function isValidUUID(uuid) {
 	// 定义一个正则表达式来匹配 UUID 格式
@@ -785,6 +833,9 @@ const WS_READY_STATE_CLOSING = 2;  // WebSocket 正在关闭过程中
  * 安全地关闭 WebSocket 连接
  * 通常，WebSocket 在关闭时不会抛出异常，但为了以防万一，我们还是用 try-catch 包裹
  * @param {import("@cloudflare/workers-types").WebSocket} socket 要关闭的 WebSocket 对象
+ *
+ * Closes a WebSocket connection safely without throwing exceptions.
+ * @param {import("@cloudflare/workers-types").WebSocket} socket The WebSocket connection to close.
  */
 function safeCloseWebSocket(socket) {
 	try {
@@ -852,6 +903,12 @@ function stringify(arr, offset = 0) {
  * @param {import("@cloudflare/workers-types").WebSocket} webSocket - 与客户端建立的 WebSocket 连接
  * @param {ArrayBuffer} vlessResponseHeader - VLESS 协议的响应头部数据
  * @param {(string)=> void} log - 日志记录函数
+ *
+ * Handles outbound UDP traffic by transforming the data into DNS queries and sending them over a WebSocket connection.
+ * @param {import("@cloudflare/workers-types").WebSocket} webSocket The WebSocket connection to send the DNS queries over.
+ * @param {ArrayBuffer} vlessResponseHeader The VLESS response header.
+ * @param {(string) => void} log The logging function.
+ * @returns {{write: (chunk: Uint8Array) => void}} An object with a write method that accepts a Uint8Array chunk to write to the transform stream.
  */
 async function handleDNSQuery(udpChunk, webSocket, vlessResponseHeader, log) {
     // 无论客户端发送到哪个 DNS 服务器，我们总是使用硬编码的服务器
