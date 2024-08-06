@@ -381,14 +381,15 @@ async function vlessOverWSHandler(request) {
 	let remoteSocketWapper = {
 		value: null,
 	};
-	let udpStreamWrite = null;
+
 	let isDns = false;
 
 	// ws --> remote
 	readableWebSocketStream.pipeTo(new WritableStream({
 		async write(chunk, controller) {
-			if (isDns && udpStreamWrite) {
-				return udpStreamWrite(chunk);
+			if (isDns) {
+				// 如果是 DNS 查询，调用 DNS 处理函数
+				return await handleDNSQuery(chunk, webSocket, null, log);
 			}
 			if (remoteSocketWapper.value) {
 				const writer = remoteSocketWapper.value.writable.getWriter()
@@ -412,12 +413,14 @@ async function vlessOverWSHandler(request) {
 			if (hasError) {
 				// controller.error(message);
 				throw new Error(message); // cf seems has bug, controller.error will not end stream
+				return;
 			}
 
 			// If UDP and not DNS port, close it
 			if (isUDP && portRemote !== 53) {
 				throw new Error('UDP proxy only enabled for DNS which is port 53');
 				// cf seems has bug, controller.error will not end stream
+				return;
 			}
 
 			if (isUDP && portRemote === 53) {
@@ -430,10 +433,8 @@ async function vlessOverWSHandler(request) {
 
 			// TODO: support udp here when cf runtime has udp support
 			if (isDns) {
-				const { write } = await handleUDPOutBound(webSocket, vlessResponseHeader, log);
-				udpStreamWrite = write;
-				udpStreamWrite(rawClientData);
-				return;
+				//const { write } = await handleUDPOutBound(webSocket, vlessResponseHeader, log);
+				return handleDNSQuery(rawClientData, webSocket, vlessResponseHeader, log);
 			}
 			handleTCPOutBound(remoteSocketWapper, addressType, addressRemote, portRemote, rawClientData, webSocket, vlessResponseHeader, log);
 		},
@@ -526,12 +527,20 @@ function makeReadableWebSocketStream(webSocketServer, earlyDataHeader, log) {
 	const stream = new ReadableStream({
 		start(controller) {
 			webSocketServer.addEventListener('message', (event) => {
+				// 如果流已被取消，不再处理新消息
+				if (readableStreamCancel) {
+					return;
+				}
 				const message = event.data;
 				controller.enqueue(message);
 			});
 
 			webSocketServer.addEventListener('close', () => {
 				safeCloseWebSocket(webSocketServer);
+				// 如果流未被取消，则关闭控制器
+				if (readableStreamCancel) {
+					return;
+				}
 				controller.close();
 			});
 
@@ -553,6 +562,9 @@ function makeReadableWebSocketStream(webSocketServer, earlyDataHeader, log) {
 		},
 
 		cancel(reason) {
+			if (readableStreamCancel) {
+				return;
+			}
 			log(`ReadableStream was canceled, due to ${reason}`)
 			readableStreamCancel = true;
 			safeCloseWebSocket(webSocketServer);
@@ -1566,3 +1578,61 @@ function socks5AddressParser(address) {
 	}
 }
 
+/**
+ * 处理 DNS 查询的函数
+ * @param {ArrayBuffer} udpChunk - 客户端发送的 DNS 查询数据
+ * @param {import("@cloudflare/workers-types").WebSocket} webSocket - 与客户端建立的 WebSocket 连接
+ * @param {ArrayBuffer} vlessResponseHeader - VLESS 协议的响应头部数据
+ * @param {(string)=> void} log - 日志记录函数
+ */
+async function handleDNSQuery(udpChunk, webSocket, vlessResponseHeader, log) {
+    // 无论客户端发送到哪个 DNS 服务器，我们总是使用硬编码的服务器
+    // 因为有些 DNS 服务器不支持 DNS over TCP
+    try {
+        // 选用 Google 的 DNS 服务器（注：后续可能会改为 Cloudflare 的 1.1.1.1）
+        const dnsServer = '8.8.4.4'; // 在 Cloudflare 修复连接自身 IP 的 bug 后，将改为 1.1.1.1
+        const dnsPort = 53; // DNS 服务的标准端口
+
+        /** @type {ArrayBuffer | null} */
+        let vlessHeader = vlessResponseHeader; // 保存 VLESS 响应头部，用于后续发送
+
+        /** @type {import("@cloudflare/workers-types").Socket} */
+        // 与指定的 DNS 服务器建立 TCP 连接
+        const tcpSocket = connect({
+            hostname: dnsServer,
+            port: dnsPort,
+        });
+
+        log(`连接到 ${dnsServer}:${dnsPort}`); // 记录连接信息
+        const writer = tcpSocket.writable.getWriter();
+        await writer.write(udpChunk); // 将客户端的 DNS 查询数据发送给 DNS 服务器
+        writer.releaseLock(); // 释放写入器，允许其他部分使用
+
+        // 将从 DNS 服务器接收到的响应数据通过 WebSocket 发送回客户端
+        await tcpSocket.readable.pipeTo(new WritableStream({
+            async write(chunk) {
+                if (webSocket.readyState === WS_READY_STATE_OPEN) {
+                    if (vlessHeader) {
+                        // 如果有 VLESS 头部，则将其与 DNS 响应数据合并后发送
+                        webSocket.send(await new Blob([vlessHeader, chunk]).arrayBuffer());
+                        vlessHeader = null; // 头部只发送一次，之后置为 null
+                    } else {
+                        // 否则直接发送 DNS 响应数据
+                        webSocket.send(chunk);
+                    }
+                }
+            },
+            close() {
+                log(`DNS 服务器(${dnsServer}) TCP 连接已关闭`); // 记录连接关闭信息
+            },
+            abort(reason) {
+                console.error(`DNS 服务器(${dnsServer}) TCP 连接异常中断`, reason); // 记录异常中断原因
+            },
+        }));
+    } catch (error) {
+        // 捕获并记录任何可能发生的错误
+        console.error(
+            `handleDNSQuery 函数发生异常，错误信息: ${error.message}`
+        );
+    }
+}
