@@ -42,7 +42,7 @@
 ## Workers 部署方法 [视频教程](https://www.youtube.com/watch?v=f9hDJCqAEGA)
 1. 部署 Cloudflare Worker：
    - 在 Cloudflare Worker 控制台中创建一个新的 Worker。
-   - 将 [worker.js](https://github.com/ansoncloud8/am-tunnel/blob/dev/_worker.js) 的内容粘贴到 Worker 编辑器中。
+   - 将 [worker.js](https://github.com/ansoncloud8/am-cf-tunnel/blob/main/_worker.js) 的内容粘贴到 Worker 编辑器中。
    - 将第 6 行 `userID` 修改成你自己的 **UUID** 。
 2. 访问订阅内容：
    - 访问 `https://[YOUR-WORKERS-URL]/[UUID]` 即可获取订阅内容。
@@ -59,11 +59,11 @@
 
 ## Pages 上传 部署方法 **最佳推荐!!!** [视频教程](https://www.youtube.com/watch?v=8oZvklBkMj4)
 1. 部署 Cloudflare Pages：
-   - 下载 [_worker.js.zip](https://raw.githubusercontent.com/ansoncloud8/am-tunnel/dev/_worker.js.zip) 文件，并点上 Star !!!
-   - 在 Cloudflare Pages 控制台中选择 `上传资产`后，为你的项目取名后点击 `创建项目`，然后上传你下载好的 [_worker.js.zip](https://raw.githubusercontent.com/ansoncloud8/am-tunnel/dev/_worker.js.zip) 文件后点击 `部署站点`。
+   - 下载 [_worker.js.zip](https://raw.githubusercontent.com/ansoncloud8/am-cf-tunnel/main/_worker.js.zip) 文件，并点上 Star !!!
+   - 在 Cloudflare Pages 控制台中选择 `上传资产`后，为你的项目取名后点击 `创建项目`，然后上传你下载好的 [_worker.js.zip](https://raw.githubusercontent.com/ansoncloud8/am-cf-tunnel/main/_worker.js.zip) 文件后点击 `部署站点`。
    - 部署完成后点击 `继续处理站点` 后，选择 `设置` > `环境变量` > **制作**为生产环境定义变量 > `添加变量`。
      变量名称填写**UUID**，值则为你的UUID，后点击 `保存`即可。
-   - 返回 `部署` 选项卡，在右下角点击 `创建新部署` 后，重新上传 [_worker.js.zip](https://raw.githubusercontent.com/ansoncloud8/am-tunnel/dev/_worker.js.zip) 文件后点击 `保存并部署` 即可。
+   - 返回 `部署` 选项卡，在右下角点击 `创建新部署` 后，重新上传 [_worker.js.zip](https://raw.githubusercontent.com/ansoncloud8/am-cf-tunnel/main/_worker.js.zip) 文件后点击 `保存并部署` 即可。
 2. 访问订阅内容：
    - 访问 `https://[YOUR-PAGES-URL]/[YOUR-UUID]` 即可获取订阅内容。
    - 例如 `https://vless.google.pages.dev/90cd4a77-141a-43c9-991b-08263cfe9c10` 就是你的通用自适应订阅地址。
