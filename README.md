@@ -22,7 +22,7 @@
 
 # 免责声明
 
-本免责声明适用于 GitHub 上的 “am-tunnel” 项目（以下简称“该项目”），项目链接为：https://github.com/ansoncloud8/am-tunnel
+本免责声明适用于 GitHub 上的 “am-cf-tunnel” 项目（以下简称“该项目”），项目链接为：https://github.com/ansoncloud8/am-cf-tunnel
 
 ### 用途
 该项目被设计和开发仅供学习、研究和安全测试目的。它旨在为安全研究者、学术界人士和技术爱好者提供一个了解和实践网络通信技术的工具。
