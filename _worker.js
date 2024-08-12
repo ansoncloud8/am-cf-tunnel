@@ -55,7 +55,7 @@ let FileName = 'am-cf-tunnel';
 let BotToken ='';
 let ChatID =''; 
 let proxyhosts = [];//本地代理域名池
-let proxyhostsURL = 'https://github.com/ansoncloud8/am-cf-trojan/blob/main/proxyhosts.txt';//在线代理域名池URL
+let proxyhostsURL = 'https://raw.githubusercontent.com/ansoncloud8/am-cf-auto-trojan/main/proxyhosts.txt';//在线代理域名池URL
 let RproxyIP = 'false';
 
 
