@@ -108,7 +108,6 @@
 | UUID | 90cd4a77-141a-43c9-991b-08263cfe9c10 |√| Powershell -NoExit -Command "[guid]::NewGuid()"| [Video](https://www.youtube.com/watch?v=8oZvklBkMj4) |  |
 | PROXYIP | ts.hpc.tw |×| 备选作为访问CloudFlareCDN站点的代理节点(支持多ProxyIP, ProxyIP之间使用`,`或 换行 作间隔) | [Video](https://youtu.be/CiSdaNOCyOk) |  |
 | SOCKS5    | user:password@127.0.0.1:1080                                 | 优先作为访问CFCDN站点的SOCKS5代理                            |
-| SUBCONFIG  | [https://raw.github.../ACL4SSR_Online_Full_MultiMode.ini](https://raw.githubusercontent.com/cmliu/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini) |×| clash、singbox等 订阅转换配置文件                            |
 | SUB       | trojan.cftest.dynv6.net                                         | 优选订阅生成器地址(使用订阅器将放弃`ADD`内的本地优选订阅内容) 
 | ADD | `icook.tw:2053#官方优选域名` |❌| 本地优选TLS域名/优选IP(支持多元素之间`,`或 换行 作间隔) ||
 | ADDAPI | [https://raw.github.../addressesapi.txt](https://raw.githubusercontent.com/ansoncloud8/am-tunnel/dev/ipv4.txt) |❌| 优选IP的API地址(支持多元素之间`,`或 换行 作间隔) ||
@@ -121,7 +120,7 @@
 | TGID      | 6946912345                                                   | 接收TG通知的账户数字ID                                       |
 | SUB       | trojan.cftest.dynv6.net                                         | 优选订阅生成器地址(使用订阅器将放弃`ADD`内的本地优选订阅内容) |
 | SUBAPI    | subapi.cftest.dynv6.net                                     | clash、singbox等 订阅转换后端                                |
-| SUBCONFIG | [https://raw.github.../ACL4SSR_Online_Mini.ini](https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online_Mini.ini) | clash、singbox等 订阅转换配置文件                            |
+| SUBCONFIG | [https://raw.github.../ACL4SSR_Online_Mini.ini](https://raw.githubusercontent.com/amclubs/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini) | clash、singbox等 订阅转换配置文件                            |
 | SUBNAME   | am-trojan                                                       | 订阅名称                                                     |
 | RPROXYIP  | false                                                        | 设为 true 即可强制获取订阅器分配的ProxyIP(需订阅器支持)      |
 | URL302    | https://t.me/AM_CLUBS                                    | 主页302跳转(支持多url, url之间使用`,`或 换行 作间隔, 小白别用) |
