@@ -108,7 +108,6 @@
 | UUID | 90cd4a77-141a-43c9-991b-08263cfe9c10 |√| Powershell -NoExit -Command "[guid]::NewGuid()"| [Video](https://www.youtube.com/watch?v=8oZvklBkMj4) |  |
 | PROXYIP | cdn-b100.xn--b6gac.eu.org |×| 备选作为访问CloudFlareCDN站点的代理节点(支持多ProxyIP, ProxyIP之间使用`,`或 换行 作间隔) | [Video](https://youtu.be/CiSdaNOCyOk) |  |
 | SOCKS5    | user:password@127.0.0.1:1080                                 | 优先作为访问CFCDN站点的SOCKS5代理                            |
-| SUB       | trojan.cftest.dynv6.net                                         | 优选订阅生成器地址(使用订阅器将放弃`ADD`内的本地优选订阅内容) 
 | ADD | `icook.tw:2053#官方优选域名` |❌| 本地优选TLS域名/优选IP(支持多元素之间`,`或 换行 作间隔) ||
 | ADDAPI | [https://raw.github.../addressesapi.txt](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.txt) |❌| 优选IP的API地址(支持多元素之间`,`或 换行 作间隔) ||
 | ADDCSV | [https://raw.github.../addressescsv.csv](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.csv) |❌| iptest测速结果(支持多元素, 元素之间使用`,`作间隔) ||
