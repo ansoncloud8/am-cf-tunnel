@@ -103,29 +103,29 @@
 </details>
 
 ## 变量说明
-| 变量名 | 示例 | 必填 | 备注 | YT |  |
-|--------|---------|-|-----|-----|--------|
-| UUID | 90cd4a77-141a-43c9-991b-08263cfe9c10 |√| Powershell -NoExit -Command "[guid]::NewGuid()"| [Video](https://www.youtube.com/watch?v=8oZvklBkMj4) |  |
-| PROXYIP | cdn-b100.xn--b6gac.eu.org |×| 备选作为访问CloudFlareCDN站点的代理节点(支持多ProxyIP, ProxyIP之间使用`,`或 换行 作间隔) | [Video](https://youtu.be/CiSdaNOCyOk) |  |
-| SOCKS5    | user:password@127.0.0.1:1080                                 | 优先作为访问CFCDN站点的SOCKS5代理                            |
+| 变量名 | 示例 | 必填 | 备注 | YT |
+|-----|-----|-----|-----|-----|
+| UUID | 90cd4a77-141a-43c9-991b-08263cfe9c10 |√| Powershell -NoExit -Command "[guid]::NewGuid()"| [Video](https://www.youtube.com/watch?v=8oZvklBkMj4) |
+| PROXYIP | cdn-b100.xn--b6gac.eu.org |❌| 备选作为访问CloudFlareCDN站点的代理节点(支持多ProxyIP, ProxyIP之间使用`,`或 换行 作间隔) | [Video](https://youtu.be/CiSdaNOCyOk) |
+| SOCKS5    | user:password@127.0.0.1:1080  |❌                               | 优先作为访问CFCDN站点的SOCKS5代理                            | |
 | ADD | `icook.tw:2053#官方优选域名` |❌| 本地优选TLS域名/优选IP(支持多元素之间`,`或 换行 作间隔) ||
 | ADDAPI | [https://raw.github.../addressesapi.txt](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.txt) |❌| 优选IP的API地址(支持多元素之间`,`或 换行 作间隔) ||
 | ADDCSV | [https://raw.github.../addressescsv.csv](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.csv) |❌| iptest测速结果(支持多元素, 元素之间使用`,`作间隔) ||
 | ADDNOTLS | `icook.hk:8080#官方优选域名` |❌| 本地优选noTLS域名/优选IP(支持多元素之间`,`或 换行 作间隔) ||
 | ADDNOTLSAPI | [https://raw.github.../addressesapi.txt](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.txt) |❌| 优选IP的API地址(支持多元素之间`,`或 换行 作间隔) ||
+| SUB       | trojan.cftest.dynv6.net   |❌                                       | 优选订阅生成器地址(使用订阅器将放弃`ADD`内的本地优选订阅内容) ||
+| SUBAPI    | subapi.cftest.dynv6.net  |❌                                    | clash、singbox等 订阅转换后端                                ||
+| SUBCONFIG | [https://raw.github.../ACL4SSR_Online_Mini.ini](https://raw.githubusercontent.com/amclubs/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini) |❌  | clash、singbox等 订阅转换配置文件  ||
+| SUBNAME   | am-cf-tunnel  |❌                                                      | 订阅名称                                                     ||
 | DLS | `8` |❌| `ADDCSV`测速结果满足速度下限 ||
-| DLS       | 8                                                            | `ADDCSV`测速结果满足速度下限                                 |
-| TGTOKEN   | 6894123456:XXXXXXXXXX0qExVsBPUhHDAbXXXXXqWXgBA               | 发送TG通知的机器人token                                      |
-| TGID      | 6946912345                                                   | 接收TG通知的账户数字ID                                       |
-| SUB       | trojan.cftest.dynv6.net                                         | 优选订阅生成器地址(使用订阅器将放弃`ADD`内的本地优选订阅内容) |
-| SUBAPI    | subapi.cftest.dynv6.net                                     | clash、singbox等 订阅转换后端                                |
-| SUBCONFIG | [https://raw.github.../ACL4SSR_Online_Mini.ini](https://raw.githubusercontent.com/amclubs/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini) | clash、singbox等 订阅转换配置文件                            |
-| SUBNAME   | am-cf-tunnel                                                       | 订阅名称                                                     |
-| RPROXYIP  | false                                                        | 设为 true 即可强制获取订阅器分配的ProxyIP(需订阅器支持)      |
-| URL302    | https://t.me/AM_CLUBS                                    | 主页302跳转(支持多url, url之间使用`,`或 换行 作间隔, 小白别用) |
-| URL       | https://t.me/AM_CLUBS                                    | 主页伪装(支持多url, url之间使用`,`或 换行 作间隔, 乱设容易触发反诈) |
-| CFEMAIL   | test@gmail.com                                              | CF账户邮箱(与`CFKEY`都填上后, 订阅信息将显示请求使用量, 小白别用) |
-| CFKEY     | c6a944b5c956b6c18c2352880952bced8b85e                        | CF账户Global API Key(与`CFEMAIL`都填上后, 订阅信息将显示请求使用量, 小白别用) |
+| DLS       | 8        |❌                                                     | `ADDCSV`测速结果满足速度下限                                 ||
+| TGTOKEN   | 6894123456:XXXXXXXXXX0qExVsBPUhHDAbXXXXXqWXgBA     |❌           | 发送TG通知的机器人token                                      ||
+| TGID      | 6946912345    |❌                                                | 接收TG通知的账户数字ID                                       ||
+| RPROXYIP  | false       |❌                                                  | 设为 true 即可强制获取订阅器分配的ProxyIP(需订阅器支持)      ||
+| URL302    | https://t.me/AM_CLUBS       |❌                              | 主页302跳转(支持多url, url之间使用`,`或 换行 作间隔, 小白别用) ||
+| URL       | https://t.me/AM_CLUBS   |❌                                  | 主页伪装(支持多url, url之间使用`,`或 换行 作间隔, 乱设容易触发反诈) ||
+| CFEMAIL   | test@gmail.com         |❌                                      | CF账户邮箱(与`CFKEY`都填上后, 订阅信息将显示请求使用量, 小白别用) ||
+| CFKEY     | c6a944b5c956b6c18c2352880952bced8b85e     |❌                    | CF账户Global API Key(与`CFEMAIL`都填上后, 订阅信息将显示请求使用量, 小白别用) ||
 
 
 ## 已适配自适应订阅内容
