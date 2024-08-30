@@ -12,7 +12,7 @@
 - Trojan免费节点部署视频教程：[点击进入观看](https://youtu.be/1ixc2A9rchM) 
 - 优选IP和优选反代IP视频教程：[点击进入观看](https://youtu.be/pKrlfRRB0gU) 
 - 聚合节点订阅视频教程：[点击进入观看](https://youtu.be/YBO2hf96150)
-- 免费订阅：[进群发关键字: 订阅](https://t.me/AM_CLUBS)
+- 免费订阅：[点击进群发送关键字: 订阅](https://t.me/AM_CLUBS)
 
 ## 订阅工具 [点击进入视频教程](https://youtu.be/xGOL57cmvaw) [点进进入karing视频教程](https://youtu.be/M3vLLBWfuFg)
 - [(安卓)v2rayNG](https://github.com/2dust/v2rayNG/releases)      [(安卓)singbox](https://github.com/SagerNet/sing-box/releases)      [(苹果)singbox](https://github.com/SagerNet/sing-box/releases)      [(苹果)Hiddify](https://github.com/hiddify/hiddify-next/releases)
