@@ -8,14 +8,13 @@
 
 这是一个基于 Cloudflare Workers 和 Pages平台的脚本，在原版的基础上修改了显示 VLESS 配置信息转换为订阅内容。使用该脚本，你可以方便地将 VLESS、trojan 配置信息使用在线配置转换到 Clash、 Singbox 、Quantumult X等工具中。
 
-- 基础部署视频教程：[小白教程](https://www.youtube.com/watch?v=f9hDJCqAEGA) 小白必看 一步到胃 最佳推荐!!!
-- 快速部署视频教程：[详细教程](https://www.youtube.com/watch?v=XS0EgqckUKo) ***最佳推荐!!!***
-- 进阶使用视频教程：[进阶教程](https://www.youtube.com/watch?v=JDAQYD6bvEM) 折腾自己的优选IP
-- 高级使用视频教程：[高级教程](https://www.youtube.com/watch?v=lQ2Evd_xPRY) 成为折腾的高手
+- VLESS免费节点部署视频教程：[点击进入观看](https://www.youtube.com/watch?v=f9hDJCqAEGA) 
+- Trojan免费节点部署视频教程：[点击进入观看](https://youtu.be/1ixc2A9rchM) 
+- 优选IP和优选反代IP视频教程：[点击进入观看](https://youtu.be/pKrlfRRB0gU) 
+- 聚合节点订阅视频教程：[点击进入观看](https://youtu.be/YBO2hf96150)
+- 免费订阅：[进群发关键字: 订阅](https://t.me/AM_CLUBS)
 
-- 官网教程：[AM科技](https://am.809098.xyz)   YouTube频道：[@AM_CLUB](https://youtube.com/@AM_CLUB)   Telegram交流群：[@AM_CLUBS](https://t.me/AM_CLUBS)   免费订阅：[进群发关键字: 订阅](https://t.me/AM_CLUBS)
-
-## 订阅工具 
+## 订阅工具 [点击进入视频教程](https://youtu.be/xGOL57cmvaw) [点进进入karing视频教程](https://youtu.be/M3vLLBWfuFg)
 - [(安卓)v2rayNG](https://github.com/2dust/v2rayNG/releases)      [(安卓)singbox](https://github.com/SagerNet/sing-box/releases)      [(苹果)singbox](https://github.com/SagerNet/sing-box/releases)      [(苹果)Hiddify](https://github.com/hiddify/hiddify-next/releases)
 - [(win)v2rayN](https://github.com/2dust/v2rayN/releases)      [(win)singbox](https://github.com/SagerNet/sing-box/releases)      [(win)clashvergerev](https://github.com/clash-verge-rev/clash-verge-rev/releases)      [(win)Hiddify](https://github.com/hiddify/hiddify-next/releases)      [(win)clashnyanpasu](https://github.com/LibNyanpasu/clash-nyanpasu/releases)      [(mac)clashnyanpasu](https://github.com/LibNyanpasu/clash-nyanpasu/releases)
 - [(mac)v2rayU](https://github.com/yanue/V2rayU/releases)      [(mac)singbox](https://github.com/SagerNet/sing-box/releases)      [(mac)clashvergerev](https://github.com/clash-verge-rev/clash-verge-rev/releases)      [(mac)Hiddify](https://github.com/hiddify/hiddify-next/releases)
@@ -71,7 +70,7 @@
    - 例如 `https://vless.google.workers.dev/90cd4a77-141a-43c9-991b-08263cfe9c10?clash` Clash订阅格式，适用OpenClash等。
    - 例如 `https://vless.google.workers.dev/90cd4a77-141a-43c9-991b-08263cfe9c10?singbox` singbox订阅格式，适用singbox等。
 
-3. 给 Pages绑定 CNAME自定义域：[视频教程](https://www.youtube.com/watch?v=8oZvklBkMj4)
+3. 给 Pages绑定 CNAME自定义域：
    - 在 Pages控制台的 `自定义域`选项卡，下方点击 `设置自定义域`。
    - 填入你的自定义次级域名，注意不要使用你的根域名，例如：
      您分配到的域名是 `google.com`，则添加自定义域填入 `vless.google.com`即可；
@@ -79,8 +78,8 @@
 
 </details>
 
-## Pages GitHub 部署方法 
-1. 部署 Cloudflare Pages：[视频教程](https://youtu.be/6lhFb4hYTYw)
+## Pages GitHub 部署方法 [视频教程](https://youtu.be/6lhFb4hYTYw)
+1. 部署 Cloudflare Pages：
    - 在 Github 上先 Fork 本项目，并点上 Star !!!
    - 在 Cloudflare Pages 控制台中选择 `连接到 Git`后，选中 `am-tunnel`项目后点击 `开始设置`。
    - 在 `设置构建和部署`页面下方，选择 `环境变量（高级）`后并 `添加变量`
@@ -109,8 +108,8 @@
 | PROXYIP | cdn-b100.xn--b6gac.eu.org |❌| 备选作为访问CloudFlareCDN站点的代理节点(支持多ProxyIP, ProxyIP之间使用`,`或 换行 作间隔) | [Video](https://youtu.be/pKrlfRRB0gU) |
 | SOCKS5    | user:password@127.0.0.1:1080  |❌                               | 优先作为访问CFCDN站点的SOCKS5代理                            |[Video](https://youtu.be/Bw82BH_ecC4) |
 | ADD | `icook.tw:2053#官方优选域名` |❌| 本地优选TLS域名/优选IP(支持多元素之间`,`或 换行 作间隔) ||
-| ADDAPI | [https://raw.github.../addressesapi.txt](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.txt) |❌| 优选IP的API地址(支持多元素之间`,`或 换行 作间隔) ||
-| ADDCSV | [https://raw.github.../addressescsv.csv](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.csv) |❌| iptest测速结果(支持多元素, 元素之间使用`,`作间隔) ||
+| ADDAPI | [https://raw.github.../addressesapi.txt](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.txt) |❌| 优选IP的API地址(支持多元素之间`,`或 换行 作间隔) |[Video](https://youtu.be/dzxezRV1v-o) |
+| ADDCSV | [https://raw.github.../addressescsv.csv](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.csv) |❌| iptest测速结果(支持多元素, 元素之间使用`,`作间隔) |[Video](https://youtu.be/vX3U3FuuTT8)|
 | ADDNOTLS | `icook.hk:8080#官方优选域名` |❌| 本地优选noTLS域名/优选IP(支持多元素之间`,`或 换行 作间隔) ||
 | ADDNOTLSAPI | [https://raw.github.../addressesapi.txt](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.txt) |❌| 优选IP的API地址(支持多元素之间`,`或 换行 作间隔) ||
 | SUB       | trojan.cftest.dynv6.net   |❌                                       | 优选订阅生成器地址(使用订阅器将放弃`ADD`内的本地优选订阅内容) ||
