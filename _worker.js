@@ -1394,7 +1394,7 @@ async function getVLESSConfig(userID, hostName, sub, UA, RproxyIP, _url) {
 //		return `
 		const output = `
 ################################################################
-Subscribe / sub 订阅地址, 支持 Base64、clash-meta、sing-box 订阅格式, ${订阅器}
+Subscribe / sub 订阅地址, 支持 Base64、clash-meta、sing-box、Quantumult X、小火箭、surge 等订阅格式, ${订阅器}
 ---------------------------------------------------------------
 快速自适应订阅地址:
 https://${proxyhost}${hostName}/${userID}
