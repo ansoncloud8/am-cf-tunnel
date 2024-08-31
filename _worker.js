@@ -1,8 +1,7 @@
 /**
 *- Telegram交流群：https://t.me/AM_CLUBS
 *- YouTube频道：https://youtube.com/@AM_CLUB
-*- VLESS订阅地址：https://worker.amcloud.filegear-sg.me/866853eb-5293-4f09-bf00-e13eb237c655
-*- Github仓库地址：https://github.com/ansoncloud8
+*- Github仓库地址：https://github.com/amclubsamclubs
 **/
 // @ts-ignore
 import { connect } from 'cloudflare:sockets';
@@ -18,7 +17,7 @@ let proxyIP = '';//
 
 let sub = '';// 留空则使用内置订阅
 let subconverter = 'url.v1.mk';// clash订阅转换后端，自带虚假uuid和host订阅。
-let subconfig = "https://raw.githubusercontent.com/ansoncloud8/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini"; //订阅配置文件
+let subconfig = "https://raw.githubusercontent.com/amclubs/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini"; //订阅配置文件
 let subProtocol = 'https';
 // The user name and password do not contain special characters
 // Setting the address will ignore proxyIP
@@ -40,12 +39,12 @@ const expire = 4102329600;//2099-12-31
 
 // 设置优选地址，不带端口号默认443，TLS订阅生成
 let addresses = [
-	'icook.tw:443#t.me/AM_CLUBS',//官方优选域名
+	'icook.hk:443#t.me/AM_CLUBS',//官方优选域名
 	//'cloudflare.cfgo.cc:443#关注YouTube频道@AM_CLUB',
 	'visa.com:443#youtube.com/@AM_CLUB'
 ];
 // 设置优选地址api接口
-let addressesapi = ['https://raw.githubusercontent.com/ansoncloud8/am-tunnel/dev/ipv4.txt'];
+let addressesapi = ['https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/ipv4.txt'];
 
 let addressesnotls = [];
 let addressesnotlsapi = [];
@@ -55,7 +54,7 @@ let FileName = 'am-cf-tunnel';
 let BotToken ='';
 let ChatID =''; 
 let proxyhosts = [];//本地代理域名池
-let proxyhostsURL = 'https://raw.githubusercontent.com/ansoncloud8/am-cf-auto-trojan/main/proxyhosts.txt';//在线代理域名池URL
+let proxyhostsURL = 'https://raw.githubusercontent.com/amclubs/am-cf-auto-trojan/main/proxyhosts.txt';//在线代理域名池URL
 let RproxyIP = 'false';
 
 
@@ -132,7 +131,14 @@ export default {
 						const URL = URLs[Math.floor(Math.random() * URLs.length)];
 						return envKey === 'URL302' ? Response.redirect(URL, 302) : fetch(new Request(URL, request));
 					}
-					return new Response(JSON.stringify(request.cf, null, 4), { status: 200 });
+					// return new Response(JSON.stringify(request.cf, null, 4), { status: 200 });
+					// 首页改成一个nginx伪装页
+					return new Response(await nginx(), {
+						headers: {
+							'Content-Type': 'text/html; charset=UTF-8',
+							'referer': 'https://www.google.com/search?q=am.809098.xyz',
+						},
+					});
 				case `/${fakeUserID}`:
 					const fakeConfig = await getVLESSConfig(userID, request.headers.get('Host'), sub, 'CF-Workers-SUB', RproxyIP, url);
 					return new Response(`${fakeConfig}`, { status: 200 });
@@ -141,10 +147,10 @@ export default {
 					if ((!sub || sub == '') && (addresses.length + addressesapi.length + addressesnotls.length + addressesnotlsapi.length + addressescsv.length) == 0){
 						if (request.headers.get('Host').includes(".workers.dev")) {
 							sub = 'worker.amcloud.filegear-sg.me'; 
-							subconfig = env.SUBCONFIG || 'https://raw.githubusercontent.com/ansoncloud8/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full.ini';
+							subconfig = env.SUBCONFIG || 'https://raw.githubusercontent.com/amclubs/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full.ini';
 						} else {
 							sub = 'worker.amcloud.filegear-sg.me';
-							subconfig = env.SUBCONFIG || "https://raw.githubusercontent.com/ansoncloud8/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini";
+							subconfig = env.SUBCONFIG || "https://raw.githubusercontent.com/amclubs/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini";
 						}
 					}
 					const vlessConfig = await getVLESSConfig(userID, request.headers.get('Host'), sub, UA, RproxyIP, url);
@@ -177,7 +183,7 @@ export default {
 						return new Response(`${vlessConfig}`, {
 							status: 200,
 							headers: {
-								"Content-Type": "text/plain;charset=utf-8",
+								"Content-Type": "text/html;charset=utf-8",
 								"Profile-Update-Interval": "6",
 								"Subscription-Userinfo": `upload=${pagesSum}; download=${workersSum}; total=${total}; expire=${expire}`,
 							}
@@ -1314,7 +1320,7 @@ async function getVLESSConfig(userID, hostName, sub, UA, RproxyIP, _url) {
 		let 订阅器 = `您的订阅内容由 ${sub} 提供维护支持, 自动获取ProxyIP: ${RproxyIP}`;
 		if (!sub || sub == '') {
 			if (!proxyIP || proxyIP =='') {
-				订阅器 = '您的订阅内容由 内置 addresses/ADD 参数提供, 当前使用的ProxyIP为空, 推荐您设置 proxyIP/PROXYIP ！！！';
+				订阅器 = '您的订阅内容由 内置 addresses/ADD 参数提供, 当前使用的ProxyIP为空, 推荐您设置PROXYIP变量或订阅连接带proxyIP';
 			} else {
 				订阅器 = `您的订阅内容由 内置 addresses/ADD 参数提供, 当前使用的ProxyIP: ${proxyIPs.join(', ')}`;
 			}
@@ -1322,16 +1328,71 @@ async function getVLESSConfig(userID, hostName, sub, UA, RproxyIP, _url) {
 			if (enableSocks) 订阅器 += `, 当前使用的Socks5: ${parsedSocks5Address.hostname}:${String(parsedSocks5Address.port)}`;
 			else 订阅器 += `, 当前使用的ProxyIP: ${proxyIPs.join(', ')}`;
 		}
-		return `
-################################################################
-telegram 交流群 技术大佬~在线交流!
-t.me/AM_CLUBS
----------------------------------------------------------------
-github 项目地址 点击Star!Star!Star!!!
-https://github.com/ansoncloud8/am-tunnel
----------------------------------------------------------------
-订阅YouTube频道,更多技术分享
-https://youtube.com/@AM_CLUB
+		
+		// HTML Head with CSS and FontAwesome library
+		const htmlHead = `
+		<head>
+		<title>am-cf-tunnel: VLESS configuration</title>
+		<meta name='description' content='AM科技 This is a tool for generating VLESS protocol configurations. Give us a star on GitHub https://github.com/amclubs if you found it useful!'>
+		<style>
+		body {
+		  font-family: Arial, sans-serif;
+		  background-color: #f0f0f0;
+		  color: #333;
+		  padding: 0px;
+		}
+
+		a {
+		  color: #1a0dab;
+		  text-decoration: none;
+		}
+		img {
+		  max-width: 100%;
+		  height: auto;
+		}
+
+		pre {
+		  white-space: pre-wrap;
+		  word-wrap: break-word;
+		  background-color: #fff;
+		  border: 1px solid #ddd;
+		  padding: 0px;
+		  margin: 0px 0;
+		}
+		/* Dark mode */
+		@media (prefers-color-scheme: dark) {
+		  body {
+			background-color: #333;
+			color: #f0f0f0;
+		  }
+
+		  a {
+			color: #9db4ff;
+		  }
+
+		  pre {
+			background-color: #282a36;
+			border-color: #6272a4;
+		  }
+		}
+		</style>
+
+		<!-- Add FontAwesome library -->
+		<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+		</head>
+		`;
+		
+		// Prepare header string
+		const header = `
+		<p align='center'>
+		<a href='t.me/AM_CLUBS' target='_blank'>t.me/AM_CLUBS 点击加入Telegram交流群 技术大佬~在线交流!!!</a> 
+		<a href='https://github.com/amclubs/am-cf-tunnel' target='_blank'>https://github.com/amclubs 点击进入GitHub项目地址 点击Star!Star!Star!!!</a> 
+		<a href='https://youtube.com/@AM_CLUB' target='_blank'>https://youtube.com/@AM_CLUB 点击进入YouTube频道,订阅频道,更多技术分享!!!</a>
+		</p>
+		`;
+				
+//		return `
+		const output = `
 ################################################################
 Subscribe / sub 订阅地址, 支持 Base64、clash-meta、sing-box 订阅格式, ${订阅器}
 ---------------------------------------------------------------
@@ -1362,6 +1423,29 @@ ${clash}
 ---------------------------------------------------------------
 ################################################################
 `;
+
+
+return `
+<html>
+${htmlHead}
+<body>
+<pre style="background-color: transparent; border: none; display: inline-block; white-space: pre-wrap; text-align: left;">${header}</pre>
+<pre>${output}</pre>
+</body>
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text)
+	.then(() => {
+	  alert("Copied to clipboard");
+	})
+	.catch((err) => {
+	  console.error("Failed to copy to clipboard:", err);
+	});
+}
+</script>
+</html>`;
+
+
 	} else {
 		if (typeof fetch != 'function') {
 			return 'Error: fetch is not available in this environment.';
@@ -1389,7 +1473,7 @@ ${clash}
 			fakeHostName = `${fakeHostName}.xyz`
 		}
 		console.log(`虚假HOST: ${fakeHostName}`);
-		let url = `${subProtocol}://${sub}/sub?host=${fakeHostName}&uuid=${fakeUserID}&tunnel=ansoncloud8&proxyip=${RproxyIP}`;
+		let url = `${subProtocol}://${sub}/sub?host=${fakeHostName}&uuid=${fakeUserID}&tunnel=amclubs&proxyip=${RproxyIP}`;
 		let isBase64 = true;
 
 		if (!sub || sub == ""){
@@ -1441,7 +1525,7 @@ ${clash}
 			} else {
 				const response = await fetch(url ,{
 					headers: {
-						'User-Agent': `${UA} CF-Workers-tunnel/ansoncloud8`
+						'User-Agent': `${UA} am-cf-tunnel/amclubs`
 					}});
 				content = await response.text();
 			}
@@ -1558,7 +1642,7 @@ async function getAddressesapi(api) {
 			method: 'get', 
 			headers: {
 				'Accept': 'text/html,application/xhtml+xml,application/xml;',
-				'User-Agent': 'CF-Workers-tunnel/ansoncloud8'
+				'User-Agent': 'am-cf-tunnel/amclubs'
 			},
 			signal: controller.signal // 将AbortController的信号量添加到fetch请求中，以便于需要时可以取消请求
 		}).then(response => response.ok ? response.text() : Promise.reject())));
@@ -1825,4 +1909,36 @@ async function sendMessage(type, ip, add_data = "") {
 function isValidIPv4(address) {
 	const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 	return ipv4Regex.test(address);
+}
+
+
+async function nginx() {
+	const text = `
+	<!DOCTYPE html>
+	<html>
+	<head>
+	<title>Welcome to nginx!</title>
+	<style>
+		body {
+			width: 35em;
+			margin: 0 auto;
+			font-family: Tahoma, Verdana, Arial, sans-serif;
+		}
+	</style>
+	</head>
+	<body>
+	<h1>Welcome to nginx!</h1>
+	<p>If you see this page, the nginx web server is successfully installed and
+	working. Further configuration is required.</p>
+
+	<p>For online documentation and support please refer to
+	<a href="http://nginx.org/">nginx.org</a>.<br/>
+	Commercial support is available at
+	<a href="http://nginx.com/">nginx.com</a>.</p>
+
+	<p><em>Thank you for using nginx.</em></p>
+	</body>
+	</html>
+	`
+	return text;
 }
