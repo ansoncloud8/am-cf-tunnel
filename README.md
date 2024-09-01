@@ -8,7 +8,7 @@
 
 这是一个基于 Cloudflare Workers 和 Pages平台的脚本，在原版的基础上修改了显示 VLESS 配置信息转换为订阅内容。使用该脚本，你可以方便地将 VLESS、trojan 配置信息使用在线配置转换到 Clash、 Singbox 、Quantumult X等工具中。
 
-- VLESS免费节点部署视频教程：[点击进入观看](https://www.youtube.com/watch?v=f9hDJCqAEGA) 
+- VLESS免费节点部署视频教程：[点击进入观看](https://youtu.be/I992KEADr80) 
 - Trojan免费节点部署视频教程：[点击进入观看](https://youtu.be/1ixc2A9rchM) 
 - 优选IP和优选反代IP视频教程：[点击进入观看](https://youtu.be/pKrlfRRB0gU) 
 - 聚合节点订阅视频教程：[点击进入观看](https://youtu.be/YBO2hf96150)
@@ -38,7 +38,7 @@
 
 作者保留随时更新本免责声明的权利，且不另行通知。最新的免责声明版本将会在该项目的 GitHub 页面上发布。
 
-## Workers 部署方法 [视频教程](https://www.youtube.com/watch?v=f9hDJCqAEGA)
+## Workers 部署方法 [视频教程](https://www.youtube.com/watch?v=I992KEADr80&t=134s)
 1. 部署 Cloudflare Worker：
    - 在 Cloudflare Worker 控制台中创建一个新的 Worker。
    - 将 [_worker.js](https://github.com/amclubs/am-cf-tunnel/blob/main/_worker.js) 的内容粘贴到 Worker 编辑器中。
@@ -55,7 +55,7 @@
 
 </details>
 
-## Pages 上传 部署方法 **最佳推荐!!!** [视频教程](https://www.youtube.com/watch?v=8oZvklBkMj4)
+## Pages 上传 部署方法 **最佳推荐!!!** [视频教程](https://www.youtube.com/watch?v=I992KEADr80&t=787s)
 1. 部署 Cloudflare Pages：
    - 下载 [_worker.js.zip](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/_worker.js.zip) 文件，并点上 Star !!!
    - 在 Cloudflare Pages 控制台中选择 `上传资产`后，为你的项目取名后点击 `创建项目`，然后上传你下载好的 [_worker.js.zip](https://raw.githubusercontent.com/amclubs/am-cf-tunnel/main/_worker.js.zip) 文件后点击 `部署站点`。
